@@ -24,7 +24,7 @@ public class Guest {
     private String email;
 
     @Column(name = "phone")
-    private long phone;
+    private String phone;
 
     @Column(name = "address")
     private String address;

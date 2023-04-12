@@ -24,7 +24,7 @@ public class Staff {
     private String email;
 
     @Column(name = "phone")
-    private long phone;
+    private String phone;
 
     @Column(name = "position")
     private String position;
