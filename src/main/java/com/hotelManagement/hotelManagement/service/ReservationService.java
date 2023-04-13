@@ -20,12 +20,19 @@ public class ReservationService {
     private RoomRepository roomRepository;
 
 
-    public Reservation createReservation(Reservation reservation){
-        //can calculate and set total price or duration here
-        //I have no idea so if u have one, u can  freely write
+    public Reservation createReservation(Reservation reservation) {
         reservation.setDuration(reservation.calculateDuration());
+
+        // Calculate the total price
+        double totalPrice = 0;
+        for (Room room : reservation.getRooms()) {
+            totalPrice += room.getPpn() * reservation.getDuration();
+        }
+        reservation.setTotal(totalPrice);
+
         return reservationRepository.save(reservation);
     }
+
 
     public List<Reservation> getAllReservation(){
         return reservationRepository.findAll();
@@ -37,12 +44,20 @@ public class ReservationService {
     }
 
 
-    public Reservation updateReservation(Long id, Reservation reservation){
+    public Reservation updateReservation(Long id, Reservation reservation) {
         Reservation existingReservation = reservationRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Reservation","id",id));
+                .orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", id));
         existingReservation.setCheckInTime(reservation.getCheckInTime());
-        existingReservation.setCheckOutTime(reservation.getCheckInTime());
+        existingReservation.setCheckOutTime(reservation.getCheckOutTime());
         existingReservation.setDuration(reservation.calculateDuration());
+
+        // Update the total price
+        double totalPrice = 0;
+        for (Room room : existingReservation.getRooms()) {
+            totalPrice += room.getPpn() * existingReservation.getDuration();
+        }
+        existingReservation.setTotal(totalPrice);
+
         return reservationRepository.save(existingReservation);
     }
 
