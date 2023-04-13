@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -33,7 +34,7 @@ public class ServiceUsage {
     @JoinColumn(name = "service_ID", referencedColumnName = "service_ID")
     private Services service;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "staff_ID", referencedColumnName = "staff_ID")
     private Staff staff;
 }

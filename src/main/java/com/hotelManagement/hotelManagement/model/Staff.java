@@ -3,6 +3,8 @@ package com.hotelManagement.hotelManagement.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -32,9 +34,9 @@ public class Staff {
     @Column(name = "salary")
     private double salary;
 
-    @OneToOne(mappedBy = "staff")
-    private Reservation reservation;
+    @OneToMany(mappedBy = "staff")
+    private List<Reservation> reservations;
 
-    @OneToOne(mappedBy = "staff")
-    private ServiceUsage serviceUsage;
+    @OneToMany(mappedBy = "staff")
+    private List<ServiceUsage> serviceUsages;
 }
