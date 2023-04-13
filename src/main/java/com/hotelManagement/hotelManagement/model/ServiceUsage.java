@@ -25,7 +25,7 @@ public class ServiceUsage {
     @Column(name = "time_out")
     private LocalDateTime timeOut;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "guest_ID", referencedColumnName = "guest_ID")
     private Guest guest;
 

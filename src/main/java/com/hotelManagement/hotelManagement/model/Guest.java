@@ -3,6 +3,8 @@ package com.hotelManagement.hotelManagement.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -32,6 +34,6 @@ public class Guest {
     @OneToOne(mappedBy = "guest")
     private Reservation reservation;
 
-    @OneToOne(mappedBy = "guest")
-    private ServiceUsage serviceUsage;
+    @OneToMany(mappedBy = "guest")
+    private List<ServiceUsage> serviceUsages;
 }
