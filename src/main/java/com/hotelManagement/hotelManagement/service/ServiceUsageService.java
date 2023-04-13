@@ -15,33 +15,34 @@ public class ServiceUsageService {
     @Autowired
     private ServiceUsageRepository serviceUsageRepository;
 
-    public ServiceUsage createServiceUsage(ServiceUsage serviceUsage){
-        //can set time in or time out here before return
+    public ServiceUsage createServiceUsage(ServiceUsage serviceUsage) {
+        //can set time_in or time_out here before return
         //I have no idea so if u have one, u can  freely write it
         return serviceUsageRepository.save(serviceUsage);
     }
 
-    public List<ServiceUsage> getAllServiceUsage(){
+    public List<ServiceUsage> getAllServiceUsage() {
         return serviceUsageRepository.findAll();
     }
 
-    public ServiceUsage getServiceUsageById(Long id){
+    public ServiceUsage getServiceUsageById(Long id) {
         return serviceUsageRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Service usage","id",id));
+                .orElseThrow(() -> new ResourceNotFoundException("Service usage", "id", id));
     }
 
-    public ServiceUsage updateServiceUsage(Long id, ServiceUsage serviceUsage){
+    public ServiceUsage updateServiceUsage(Long id, ServiceUsage serviceUsage) {
         ServiceUsage existingSU = serviceUsageRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Service usage","id",id));
-        existingSU.setService(existingSU.getService());
-        existingSU.setTimeIn(existingSU.getTimeIn());
-        existingSU.setTimeOut(existingSU.getTimeOut());
+                .orElseThrow(() -> new ResourceNotFoundException("Service usage", "id", id));
+        existingSU.setService(serviceUsage.getService());
+        existingSU.setTimeIn(serviceUsage.getTimeIn());
+        existingSU.setTimeOut(serviceUsage.getTimeOut());
         return serviceUsageRepository.save(existingSU);
     }
 
-    public void deleteServiceUsage(Long id){
+
+    public void deleteServiceUsage(Long id) {
         ServiceUsage serviceUsage = serviceUsageRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Service usage","id",id));
+                .orElseThrow(() -> new ResourceNotFoundException("Service usage", "id", id));
         serviceUsageRepository.delete(serviceUsage);
     }
 
