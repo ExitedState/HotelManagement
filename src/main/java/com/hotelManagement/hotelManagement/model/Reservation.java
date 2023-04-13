@@ -20,14 +20,19 @@ public class Reservation {
     @Column(name = "Reservation_ID")
     private Long reservationID;
 
+    @Column(name = "check_in_time")
     private LocalDateTime checkInTime;
 
+    @Column(name = "check_out_time")
     private LocalDateTime checkOutTime;
 
+    @Column(name = "duration")
     private int duration;
 
+    @Column(name = "total")
     private double total;
 
+    @Column(name = "person")
     private int person;
 
     @OneToOne
