@@ -3,9 +3,7 @@ package com.hotelManagement.hotelManagement.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -43,8 +41,15 @@ public class Reservation {
     @JoinColumn(name = "staff_ID", referencedColumnName = "staff_ID")
     private Staff staff;
 
-    @OneToMany(mappedBy = "reservation")
-    private List<Room> rooms;
+    @ManyToOne
+    @JoinColumn(name = "room_ID", referencedColumnName = "room_ID")
+    private Room room;
+
+    @PrePersist
+    @PreUpdate
+    private void updateDuration() {
+        duration = calculateDuration();
+    }
 
     public int calculateDuration() {
         if (checkInTime != null && checkOutTime != null) {

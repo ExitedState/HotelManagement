@@ -31,6 +31,7 @@ public class RoomService {
     public Room updateRoom(Long id, Room room){
         Room existingRoom = roomRepository.findById(id)
                         .orElseThrow(() -> new ResourceNotFoundException("Room","id",id));
+        existingRoom.setRoomNumber(room.getRoomNumber());
         existingRoom.setRoomStatus(room.getRoomStatus());
         existingRoom.setRoomType(room.getRoomType());
         existingRoom.setPpn(room.getPpn());

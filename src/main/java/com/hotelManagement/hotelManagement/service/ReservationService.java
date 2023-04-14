@@ -24,10 +24,7 @@ public class ReservationService {
         reservation.setDuration(reservation.calculateDuration());
 
         // Calculate the total price
-        double totalPrice = 0;
-        for (Room room : reservation.getRooms()) {
-            totalPrice += room.getPpn() * reservation.getDuration();
-        }
+        double totalPrice = reservation.getRoom().getPpn() * reservation.getDuration();
         reservation.setTotal(totalPrice);
 
         return reservationRepository.save(reservation);
@@ -52,10 +49,7 @@ public class ReservationService {
         existingReservation.setDuration(reservation.calculateDuration());
 
         // Update the total price
-        double totalPrice = 0;
-        for (Room room : existingReservation.getRooms()) {
-            totalPrice += room.getPpn() * existingReservation.getDuration();
-        }
+        double totalPrice = existingReservation.getRoom().getPpn() * existingReservation.getDuration();
         existingReservation.setTotal(totalPrice);
 
         return reservationRepository.save(existingReservation);
