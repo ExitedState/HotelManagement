@@ -7,6 +7,10 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -33,14 +37,17 @@ public class Reservation {
     @Column(name = "person")
     private int person;
 
+    @JsonBackReference
     @OneToOne
     @JoinColumn(name = "guest_ID", referencedColumnName = "guest_ID")
     private Guest guest;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "staff_ID", referencedColumnName = "staff_ID")
     private Staff staff;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "room_ID", referencedColumnName = "room_ID")
     private Room room;
@@ -49,13 +56,23 @@ public class Reservation {
     @PreUpdate
     private void updateDuration() {
         duration = calculateDuration();
+        calculateTotal();
     }
+
 
     public int calculateDuration() {
         if (checkInTime != null && checkOutTime != null) {
             return (int) ChronoUnit.DAYS.between(checkInTime.toLocalDate(), checkOutTime.toLocalDate());
         }
         return 0;
+    }
+
+    public void calculateTotal() {
+        if (room != null && duration > 0) {
+            total = room.getPpn() * duration;
+        } else {
+            total = 0;
+        }
     }
 
 }

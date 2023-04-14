@@ -2,7 +2,8 @@ package com.hotelManagement.hotelManagement.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.List;
 
 @Entity
@@ -31,6 +32,7 @@ public class Guest {
     @Column(name = "address")
     private String address;
 
+    @JsonManagedReference
     @OneToOne(mappedBy = "guest")
     private Reservation reservation;
 
