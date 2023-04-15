@@ -32,6 +32,7 @@ public class Room {
     @Column(name = "num_people")
     private int capacity;
 
+//    @JsonManagedReference(value = "reservation-room")
     @OneToMany(mappedBy = "room")
     private List<Reservation> reservations;
 }

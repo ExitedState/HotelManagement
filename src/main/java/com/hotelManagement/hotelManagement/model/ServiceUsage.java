@@ -27,14 +27,17 @@ public class ServiceUsage {
     @Column(name = "time_out")
     private LocalDateTime timeOut;
 
+    @JsonBackReference(value = "guest-serviceUsage")
     @ManyToOne
     @JoinColumn(name = "guest_ID", referencedColumnName = "guest_ID")
     private Guest guest;
 
+    @JsonBackReference(value = "service-serviceUsage")
     @OneToOne
     @JoinColumn(name = "service_ID", referencedColumnName = "service_ID")
     private Services service;
 
+    @JsonBackReference(value = "reservation-serviceUsage")
     @ManyToOne
     @JoinColumn(name = "staff_ID", referencedColumnName = "staff_ID")
     private Staff staff;

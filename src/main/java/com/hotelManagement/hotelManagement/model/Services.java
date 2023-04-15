@@ -27,6 +27,7 @@ public class Services {
     @Column(name = "status")
     private String status;
 
+//    @JsonManagedReference(value = "service-serviceUsage")
     @OneToOne(mappedBy = "service")
     private ServiceUsage serviceUsage;
 }

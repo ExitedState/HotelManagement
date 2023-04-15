@@ -35,9 +35,11 @@ public class Staff {
     @Column(name = "salary")
     private double salary;
 
+//    @JsonManagedReference(value = "staff-reservation")
     @OneToMany(mappedBy = "staff")
     private List<Reservation> reservations;
 
+//    @JsonManagedReference(value = "staff-serviceUsage")
     @OneToMany(mappedBy = "staff")
     private List<ServiceUsage> serviceUsages;
 }

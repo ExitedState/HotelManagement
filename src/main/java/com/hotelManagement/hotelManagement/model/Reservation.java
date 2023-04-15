@@ -37,7 +37,7 @@ public class Reservation {
     @Column(name = "person")
     private int person;
 
-    @JsonBackReference(value = "guest-reservation")
+    @JsonBackReference(value = "reservation-guest")
     @OneToOne
     @JoinColumn(name = "guest_ID", referencedColumnName = "guest_ID")
     private Guest guest;
