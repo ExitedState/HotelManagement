@@ -2,10 +2,67 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Hotel Management</title>
+    <title>The Continental Hotel</title>
+    <style>
+        body {
+            background-color: #191919;
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            text-align: center;
+            background-image: url("background.jpg");
+            background-size: cover;
+        }
+        h1 {
+            color: #191919;
+            font-size: 4rem;
+            margin-top: 8rem;
+        }
+        button {
+            background-color: #DAA520;
+            border: none;
+            border-radius: 5px;
+            color: #111;
+            font-size: 1.5rem;
+            padding: 1.2rem 2.5rem;
+            transition: all 0.3s ease;
+            margin-top: 3rem;
+        }
+        button:hover {
+            background-color: #1e1e1e;
+            color: #DAA520;
+            cursor: pointer;
+        }
+        .hotel-logo {
+            width: 375px;
+            margin-bottom: 0.5rem;
+            animation: logo-fade 3s ease forwards;
+        }
+
+        @keyframes logo-fade {
+            0% { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @media screen and (max-width: 768px) {
+            .hotel-logo {
+                width: 80%;
+            }
+            h1 {
+                font-size: 2.5rem;
+                margin-top: 6rem;
+            }
+            button {
+                font-size: 1.2rem;
+                padding: 1rem 2rem;
+                margin-top: 2.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
-<h1>Welcome to Hotel Management</h1>
-<button onclick="location.href='guest.html';">Go to Guest Page</button>
+<img src="hotel logo.jpg" alt="The Continental Hotel Logo" class="hotel-logo">
+<h1>Welcome to The Continental Hotel</h1>
+<button onclick="location.href='guest.html';">Enter</button>
 </body>
 </html>
