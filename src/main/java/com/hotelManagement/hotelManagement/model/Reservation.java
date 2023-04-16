@@ -1,5 +1,6 @@
 package com.hotelManagement.hotelManagement.model;
 
+import com.hotelManagement.hotelManagement.exception.ResourceNotFoundException;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -56,7 +57,6 @@ public class Reservation {
     @PreUpdate
     private void updateDuration() {
         duration = calculateDuration();
-        calculateTotal();
     }
 
 
@@ -67,12 +67,5 @@ public class Reservation {
         return 0;
     }
 
-    public void calculateTotal() {
-        if (room != null && duration > 0) {
-            total = room.getPpn() * duration;
-        } else {
-            total = 0;
-        }
-    }
 
 }

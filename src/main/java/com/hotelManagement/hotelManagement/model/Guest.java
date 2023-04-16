@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -39,5 +41,5 @@ public class Guest {
 
 //    @JsonManagedReference(value = "guest-serviceUsage")
     @OneToMany(mappedBy = "guest")
-    private List<ServiceUsage> serviceUsages;
+    private List<ServiceUsage> serviceUsages = new ArrayList<>();
 }
