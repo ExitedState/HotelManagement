@@ -9,6 +9,8 @@ import com.hotelManagement.hotelManagement.repository.ServicesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -20,8 +22,16 @@ public class ServiceUsageService {
     private ReservationService reservationService;
 
     public ServiceUsage createServiceUsage(ServiceUsage serviceUsage) {
-        //can set time_in or time_out here before return
-        //I have no idea so if u have one, u can  freely write it
+        // Set time_in to the current time if not provided
+        if (serviceUsage.getTimeIn() == null) {
+            LocalDateTime currentTime = LocalDateTime.now();
+            serviceUsage.setTimeIn(currentTime);
+        }
+        // Set time_out to one hour later if not provided
+        if (serviceUsage.getTimeOut() == null) {
+            LocalDateTime oneHourLater = serviceUsage.getTimeIn().plus(1, ChronoUnit.HOURS);
+            serviceUsage.setTimeOut(oneHourLater);
+        }
         return serviceUsageRepository.save(serviceUsage);
     }
 
