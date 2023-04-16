@@ -87,5 +87,12 @@ public class ReservationService {
         reservationRepository.delete(reservation);
     }
 
+    public void recalculateTotalForReservation(Long reservationId) {
+        Reservation reservation = getReservationById(reservationId);
+        double totalPrice = reservation.getRoom().getPpn() * reservation.getDuration();
+        totalPrice += getServiceUsageTotalForGuest(reservation.getGuest());
+        reservation.setTotal(totalPrice);
+        reservationRepository.save(reservation);
+    }
 
 }

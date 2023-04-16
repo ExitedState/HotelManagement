@@ -1,6 +1,8 @@
 package com.hotelManagement.hotelManagement.service;
 
 import com.hotelManagement.hotelManagement.exception.ResourceNotFoundException;
+import com.hotelManagement.hotelManagement.model.Guest;
+import com.hotelManagement.hotelManagement.model.Reservation;
 import com.hotelManagement.hotelManagement.model.ServiceUsage;
 import com.hotelManagement.hotelManagement.repository.ServiceUsageRepository;
 import com.hotelManagement.hotelManagement.repository.ServicesRepository;
@@ -14,6 +16,8 @@ public class ServiceUsageService {
 
     @Autowired
     private ServiceUsageRepository serviceUsageRepository;
+    @Autowired
+    private ReservationService reservationService;
 
     public ServiceUsage createServiceUsage(ServiceUsage serviceUsage) {
         //can set time_in or time_out here before return
@@ -36,7 +40,19 @@ public class ServiceUsageService {
         existingSU.setService(serviceUsage.getService());
         existingSU.setTimeIn(serviceUsage.getTimeIn());
         existingSU.setTimeOut(serviceUsage.getTimeOut());
-        return serviceUsageRepository.save(existingSU);
+
+        ServiceUsage updatedServiceUsage = serviceUsageRepository.save(existingSU);
+
+        // Get the guest related to this service usage
+        Guest guest = updatedServiceUsage.getGuest();
+
+        // Update the total for the reservation linked to this guest
+        Reservation reservation = guest.getReservation();
+        if (reservation != null) {
+            reservationService.recalculateTotalForReservation(reservation.getReservationID());
+        }
+
+        return updatedServiceUsage;
     }
 
 
