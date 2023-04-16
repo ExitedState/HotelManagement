@@ -28,6 +28,14 @@ public class ReservationService {
 
 
     public Reservation createReservation(Reservation reservation) {
+        // Check if the guest already has a reservation
+        Long guestId = reservation.getGuest().getGuestID();
+        Guest guest = guestRepository.findById(guestId)
+                .orElseThrow(() -> new ResourceNotFoundException("Guest", "id", guestId));
+        if (guest.getReservation() != null) {
+            System.out.println("Guest with ID " + guestId + " already has a reservation.");
+            throw new IllegalStateException("Guest with ID " + guestId + " already has a reservation.");
+        }
         reservation.setDuration(reservation.calculateDuration());
 
         // Fetch the room from the database
@@ -35,9 +43,9 @@ public class ReservationService {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new ResourceNotFoundException("Room", "id", roomId));
         // Fetch the guest from the database
-        Long guestId = reservation.getGuest().getGuestID();
-        Guest guest = guestRepository.findById(guestId)
-                .orElseThrow(() -> new ResourceNotFoundException("Guest", "id", guestId));
+//        guestId = reservation.getGuest().getGuestID();
+//        guest = guestRepository.findById(guestId)
+//                .orElseThrow(() -> new ResourceNotFoundException("Guest", "id", guestId));
 
         // Calculate the total price
         double totalPrice = room.getPpn() * reservation.getDuration();
