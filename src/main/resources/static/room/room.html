@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Room Page</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        form {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            width: 50%;
+        }
+
+        form input, form button {
+            margin-top: 10px;
+        }
+
+        #editModal, #detailsModal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        #editModalContent, #detailsModalContent {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%;
+        }
+    </style>
+    <script>
+        let currentRoomId;
+
+        async function fetchRooms() {
+            const searchQuery = document.getElementById('search').value.toLowerCase();
+            const response = await fetch('/rooms');
+            const rooms = await response.json();
+            const table = document.getElementById('roomTable');
+            const tbody = table.querySelector('tbody');
+            while (tbody.firstChild) {
+                tbody.removeChild(tbody.firstChild);
+            }
+
+            rooms.forEach(room => {
+                if (
+                    room.roomNumber.toString().includes(searchQuery) ||
+                    room.roomStatus.toLowerCase().includes(searchQuery) ||
+                    room.roomType.toLowerCase().includes(searchQuery) ||
+                    room.capacity.toString().includes(searchQuery)
+                ) {
+                    const row = tbody.insertRow(-1);
+                    const idCell = row.insertCell(0);
+                    const numberCell = row.insertCell(1);
+                    const statusCell = row.insertCell(2);
+                    const typeCell = row.insertCell(3);
+                    const ppnCell = row.insertCell(4);
+                    const capacityCell = row.insertCell(5);
+                    const actionsCell = row.insertCell(6);
+
+                    idCell.textContent = room.roomID;
+                    numberCell.textContent = room.roomNumber;
+                    statusCell.textContent = room.roomStatus;
+                    typeCell.textContent = room.roomType;
+                    ppnCell.textContent = room.ppn.toLocaleString();
+                    capacityCell.textContent = room.capacity;
+
+                    const editButton = document.createElement('button');
+                    editButton.textContent = 'Edit';
+                    editButton.addEventListener('click', () => {
+                        showEditModal(room);
+                    });
+                    actionsCell.appendChild(editButton);
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'Delete';
+                    deleteButton.addEventListener('click', async () => {
+                        const confirmDelete = confirm('Are you sure you want to delete this room?');
+                        if (confirmDelete) {
+                            const response = await fetch(`/rooms/${room.roomID}`, {
+                                method: 'DELETE'
+                            });
+                            if (response.ok) {
+                                location.reload();
+                            } else {
+                                alert('Failed to delete room.');
+                            }
+                        }
+                    });
+                    actionsCell.appendChild(deleteButton);
+
+                }
+            });
+        }
+
+
+        function showEditModal(room) {
+            currentRoomId = room.roomID;
+            document.getElementById('editRoomNumber').value = room.roomNumber;
+            document.getElementById('editRoomStatus').value = room.roomStatus;
+            document.getElementById('editRoomType').value = room.roomType;
+            document.getElementById('editPPN').value = room.ppn;
+            document.getElementById('editCapacity').value = room.capacity;
+            document.getElementById('editModal').style.display = 'block';
+        }
+
+        function hideEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+
+        async function updateRoom(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            const response = await fetch(`/rooms/${currentRoomId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(Object.fromEntries(formData))
+            });
+            if (response.ok) {
+                location.reload();
+            } else {
+                alert('Failed to update room.');
+            }
+        }
+
+        async function createRoom(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            const response = await fetch('/rooms', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(Object.fromEntries(formData))
+            });
+            if (response.ok) {
+                location.reload();
+            } else {
+                alert('Failed to create room.');
+            }
+        }
+
+        async function deleteRoom(id) {
+            const confirmDelete = confirm('Are you sure you want to delete this room?');
+            if (confirmDelete) {
+                const response = await fetch(`/rooms/${id}`, {
+                    method: 'DELETE'
+                });
+                if (response.ok) {
+                    location.reload();
+                } else {
+                    alert('Failed to delete room.');
+                }
+            }
+        }
+
+        window.addEventListener('click', (event) => {
+            if (event.target === document.getElementById('editModal')) {
+                hideEditModal();
+            }
+        });
+    </script>
+</head>
+<body onload="fetchRooms()">
+<h1>Room Page</h1>
+<div>
+    <input type="text" id="search" placeholder="Search..." oninput="fetchRooms()">
+    <button onclick="fetchRooms()">Search</button>
+</div>
+<table id="roomTable">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Room Number</th>
+        <th>Room Status</th>
+        <th>Room Type</th>
+        <th>PPN</th>
+        <th>Capacity</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+<div id="editModal">
+    <div id="editModalContent">
+        <form onsubmit="updateRoom(event)">
+            <label for="editRoomNumber">Room Number</label>
+            <input type="text" id="editRoomNumber" name="roomNumber">
+            <label for="editRoomStatus">Room Status</label>
+            <select id="editRoomStatus" name="roomStatus">
+                <option value="AVAILABLE">AVAILABLE</option>
+                <option value="MAINTENANCE">MAINTENANCE</option>
+            </select>
+            <label for="editRoomType">Room Type</label>
+            <select id="editRoomType" name="roomType" required>
+                <option value="STANDARD">STANDARD</option>
+                <option value="DELUXE">DELUXE</option>
+                <option value="EXECUTIVE">EXECUTIVE</option>
+                <option value="PRESIDENTIAL">PRESIDENTIAL</option>
+            </select>
+            <label for="editPPN">PPN</label>
+            <input type="text" id="editPPN" name="ppn">
+            <label for="editCapacity">Capacity</label>
+            <input type="text" id="editCapacity" name="capacity">
+            <button type="submit">Update</button>
+        </form>
+    </div>
+</div>
+<div id="createModal">
+    <div id="createModalContent">
+        <form onsubmit="createRoom(event)">
+            <label for="createRoomNumber">Room Number</label>
+            <input type="text" id="createRoomNumber" name="roomNumber">
+            <label for="createRoomStatus">Room Status</label>
+            <select id="createRoomStatus" name="roomStatus">
+                <option value="AVAILABLE">AVAILABLE</option>
+                <option value="MAINTENANCE">MAINTENANCE</option>
+            </select>
+            <label for="createRoomType">Room Type</label>
+            <select id="createRoomType" name="roomType" required>
+                <option value="STANDARD">STANDARD</option>
+                <option value="DELUXE">DELUXE</option>
+                <option value="EXECUTIVE">EXECUTIVE</option>
+                <option value="PRESIDENTIAL">PRESIDENTIAL</option>
+            </select>
+            <label for="createPPN">PPN</label>
+            <input type="text" id="createPPN" name="ppn">
+            <label for="createCapacity">Capacity</label>
+            <input type="text" id="createCapacity" name="capacity">
+            <button type="submit">Create</button>
+        </form>
+    </div>
+</div>
+<button onclick="document.getElementById('createModal').style.display = 'block'">Create Room</button>
+</body>
+</html>

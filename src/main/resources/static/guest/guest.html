@@ -49,6 +49,46 @@
             border: 1px solid #888;
             width: 50%;
         }
+
+        #detailsModal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        #detailsModalContent {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%;
+        }
+
+        .navbar {
+            overflow: hidden;
+            background-color: #333;
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
     </style>
     <script>
         let currentGuestId;
@@ -108,10 +148,17 @@
                         }
                     });
                     actionsCell.appendChild(deleteButton);
+
+                    const detailsButton = document.createElement('button');
+                    detailsButton.textContent = 'Details';
+                    detailsButton.addEventListener('click', () => {
+                        showDetailsModal(guest);
+                    });
+                    actionsCell.appendChild(detailsButton);
+
                 }
             });
         }
-
 
 
         function showEditModal(guest) {
@@ -146,6 +193,32 @@
             }
         }
 
+        function showDetailsModal(guest) {
+            document.getElementById('detailsReservationID').textContent = guest.reservation.reservationID;
+            document.getElementById('detailsCheckInTime').textContent = guest.reservation.checkInTime;
+            document.getElementById('detailsCheckOutTime').textContent = guest.reservation.checkOutTime;
+            document.getElementById('detailsDuration').textContent = guest.reservation.duration;
+            document.getElementById('detailsTotal').textContent = guest.reservation.total;
+            document.getElementById('detailsPerson').textContent = guest.reservation.person;
+
+            const serviceUsageList = document.getElementById('detailsServiceUsageList');
+            while (serviceUsageList.firstChild) {
+                serviceUsageList.removeChild(serviceUsageList.firstChild);
+            }
+            guest.serviceUsages.forEach(serviceUsage => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `ServiceUsageID: ${serviceUsage.serviceUsageID}, TimeIn: ${serviceUsage.timeIn}, TimeOut: ${serviceUsage.timeOut}, Service: ${serviceUsage.service.serviceName}, Price: ${serviceUsage.service.price}`;
+                serviceUsageList.appendChild(listItem);
+            });
+
+            document.getElementById('detailsModal').style.display = 'block';
+        }
+
+        function hideDetailsModal() {
+            document.getElementById('detailsModal').style.display = 'none';
+        }
+
+
         async function createGuest(event) {
             event.preventDefault();
             const form = event.target;
@@ -164,24 +237,6 @@
             }
         }
 
-        async function searchGuests() {
-            const searchValue = document.getElementById('search').value.toLowerCase();
-            const table = document.getElementById('guestTable');
-            const rows = table.getElementsByTagName('tr');
-
-            for (let i = 1; i < rows.length; i++) {
-                const firstName = rows[i].getElementsByTagName('td')[1].textContent.toLowerCase();
-                const lastName = rows[i].getElementsByTagName('td')[2].textContent.toLowerCase();
-                const phone = rows[i].getElementsByTagName('td')[4].textContent.toLowerCase();
-
-                if (firstName.indexOf(searchValue) > -1 || lastName.indexOf(searchValue) > -1 || phone.indexOf(searchValue) > -1) {
-                    rows[i].style.display = "";
-                } else {
-                    rows[i].style.display = "none";
-                }
-            }
-        }
-
         window.addEventListener('click', (event) => {
             if (event.target === document.getElementById('editModal')) {
                 hideEditModal();
@@ -190,7 +245,14 @@
     </script>
 </head>
 <body onload="fetchGuests();">
-<h1>Guest Page</h1>
+<div class="navbar">
+    <a href="/guest/guest.html">Guest</a>
+    <a href="/room/room.html">Room</a>
+    <a href="/res/res.html">Reservation</a>
+    <a href="/service/service.html">Service</a>
+    <a href="/serUse/serUse.html">Service Usage</a>
+    <a href="/staff/staff.html">Staff</a>
+</div>
 <div>
     <label for="search">Search:</label>
     <input type="text" id="search" placeholder="Search by fn, ln or phone" oninput="fetchGuests();">
@@ -255,6 +317,23 @@
         <button onclick="hideEditModal();">Cancel</button>
     </div>
 </div>
+<div id="detailsModal">
+    <div id="detailsModalContent">
+        <h2>Reservation and Service Usage Details</h2>
+        <h3>Reservation Details</h3>
+        <p>Reservation ID: <span id="detailsReservationID"></span></p>
+        <p>Check-In Time: <span id="detailsCheckInTime"></span></p>
+        <p>Check-Out Time: <span id="detailsCheckOutTime"></span></p>
+        <p>Duration: <span id="detailsDuration"></span> days</p>
+        <p>Total: $<span id="detailsTotal"></span></p>
+        <p>Person: <span id="detailsPerson"></span></p>
+
+        <h3>Service Usage Details</h3>
+        <ul id="detailsServiceUsageList"></ul>
+        <button onclick="hideDetailsModal();">Close</button>
+    </div>
+</div>
+
 </body>
 </html>
 
