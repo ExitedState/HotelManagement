@@ -1,9 +1,9 @@
 package com.hotelManagement.hotelManagement.service;
 
 import com.hotelManagement.hotelManagement.exception.ResourceNotFoundException;
-import com.hotelManagement.hotelManagement.model.Guest;
-import com.hotelManagement.hotelManagement.model.Reservation;
-import com.hotelManagement.hotelManagement.model.ServiceUsage;
+import com.hotelManagement.hotelManagement.model.*;
+import com.hotelManagement.hotelManagement.repository.GuestRepository;
+import com.hotelManagement.hotelManagement.repository.StaffRepository;
 import com.hotelManagement.hotelManagement.repository.ServiceUsageRepository;
 import com.hotelManagement.hotelManagement.repository.ServicesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +20,12 @@ public class ServiceUsageService {
     private ServiceUsageRepository serviceUsageRepository;
     @Autowired
     private ReservationService reservationService;
+    @Autowired
+    private GuestRepository guestRepository;
+    @Autowired
+    private StaffRepository staffRepository;
+    @Autowired
+    private ServicesRepository servicesRepository;
 
     public ServiceUsage createServiceUsage(ServiceUsage serviceUsage) {
         // Set time_in to the current time if not provided
@@ -32,6 +38,21 @@ public class ServiceUsageService {
             LocalDateTime oneHourLater = serviceUsage.getTimeIn().plus(1, ChronoUnit.HOURS);
             serviceUsage.setTimeOut(oneHourLater);
         }
+        Long serviceId = serviceUsage.getService().getServiceID();
+        Long guestId = serviceUsage.getGuest().getGuestID();
+        Long staffId = serviceUsage.getStaff().getStaffID();
+
+        Services service = servicesRepository.findById(serviceId)
+                .orElseThrow(() -> new ResourceNotFoundException("Service", "id", serviceId));
+        Guest guest = guestRepository.findById(guestId)
+                .orElseThrow(() -> new ResourceNotFoundException("Guest", "id", guestId));
+        Staff staff = staffRepository.findById(staffId)
+                .orElseThrow(() -> new ResourceNotFoundException("Staff", "id", staffId));
+
+        serviceUsage.setService(service);
+        serviceUsage.setGuest(guest);
+        serviceUsage.setStaff(staff);
+
         return serviceUsageRepository.save(serviceUsage);
     }
 
