@@ -49,6 +49,26 @@
             border: 1px solid #888;
             width: 50%;
         }
+
+        .navbar {
+            overflow: hidden;
+            background-color: #333;
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
     </style>
     <script>
         let currentRoomId;
@@ -165,20 +185,6 @@
             }
         }
 
-        async function deleteRoom(id) {
-            const confirmDelete = confirm('Are you sure you want to delete this room?');
-            if (confirmDelete) {
-                const response = await fetch(`/rooms/${id}`, {
-                    method: 'DELETE'
-                });
-                if (response.ok) {
-                    location.reload();
-                } else {
-                    alert('Failed to delete room.');
-                }
-            }
-        }
-
         window.addEventListener('click', (event) => {
             if (event.target === document.getElementById('editModal')) {
                 hideEditModal();
@@ -187,7 +193,14 @@
     </script>
 </head>
 <body onload="fetchRooms()">
-<h1>Room Page</h1>
+<div class="navbar">
+    <a href="/guest/guest.html">Guest</a>
+    <a href="/room/room.html">Room</a>
+    <a href="/res/res.html">Reservation</a>
+    <a href="/service/service.html">Service</a>
+    <a href="/serUse/serUse.html">Service Usage</a>
+    <a href="/staff/staff.html">Staff</a>
+</div>
 <div>
     <input type="text" id="search" placeholder="Search..." oninput="fetchRooms()">
     <button onclick="fetchRooms()">Search</button>
