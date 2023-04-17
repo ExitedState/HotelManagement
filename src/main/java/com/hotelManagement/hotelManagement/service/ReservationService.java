@@ -12,6 +12,7 @@ import com.hotelManagement.hotelManagement.repository.ServiceUsageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -46,7 +47,9 @@ public class ReservationService {
 //        guestId = reservation.getGuest().getGuestID();
 //        guest = guestRepository.findById(guestId)
 //                .orElseThrow(() -> new ResourceNotFoundException("Guest", "id", guestId));
-
+        if (!isRoomAvailable(room, reservation.getCheckInTime(), reservation.getCheckOutTime())) {
+            throw new IllegalStateException("The room is not available for the specified time period.");
+        }
         // Calculate the total price
         double totalPrice = room.getPpn() * reservation.getDuration();
         totalPrice += getServiceUsageTotalForGuest(guest);
@@ -77,6 +80,9 @@ public class ReservationService {
     public Reservation updateReservation(Long id, Reservation reservation) {
         Reservation existingReservation = reservationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", id));
+        if (!isRoomAvailable(existingReservation.getRoom(), reservation.getCheckInTime(), reservation.getCheckOutTime())) {
+            throw new IllegalStateException("The room is not available for the specified time period.");
+        }
         existingReservation.setCheckInTime(reservation.getCheckInTime());
         existingReservation.setCheckOutTime(reservation.getCheckOutTime());
         existingReservation.setDuration(reservation.calculateDuration());
@@ -102,5 +108,18 @@ public class ReservationService {
         reservation.setTotal(totalPrice);
         reservationRepository.save(reservation);
     }
+
+    private boolean isRoomAvailable(Room room, LocalDateTime checkInTime, LocalDateTime checkOutTime) {
+        List<Reservation> reservations = reservationRepository.findByRoom(room);
+
+        for (Reservation reservation : reservations) {
+            if (checkInTime.isBefore(reservation.getCheckOutTime()) && checkOutTime.isAfter(reservation.getCheckInTime())) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 
 }
