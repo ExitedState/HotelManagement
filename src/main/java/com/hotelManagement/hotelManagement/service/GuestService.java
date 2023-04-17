@@ -16,6 +16,9 @@ public class GuestService {
 
 
     public Guest createGuest(Guest guest){
+        String phone = guest.getPhone();
+        String sanitizedPhone = phone.replaceAll("\\D", "");
+        guest.setPhone(sanitizedPhone);
         return guestRepository.save(guest);
     }
 
