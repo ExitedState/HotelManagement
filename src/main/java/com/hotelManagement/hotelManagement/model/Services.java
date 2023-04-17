@@ -1,8 +1,11 @@
 package com.hotelManagement.hotelManagement.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -27,7 +30,8 @@ public class Services {
     @Column(name = "status")
     private String status;
 
-//    @JsonManagedReference(value = "service-serviceUsage")
-    @OneToOne(mappedBy = "service")
-    private ServiceUsage serviceUsage;
+    //    @JsonManagedReference(value = "service-serviceUsage")
+    @JsonBackReference(value = "serviceUsage-service")
+    @OneToMany(mappedBy = "service")
+    private List<ServiceUsage> serviceUsages;
 }

@@ -1,6 +1,7 @@
 package com.hotelManagement.hotelManagement.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,8 +33,7 @@ public class ServiceUsage {
     @JoinColumn(name = "guest_ID", referencedColumnName = "guest_ID")
     private Guest guest;
 
-    @JsonBackReference(value = "service-serviceUsage")
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "service_ID", referencedColumnName = "service_ID")
     private Services service;
 
