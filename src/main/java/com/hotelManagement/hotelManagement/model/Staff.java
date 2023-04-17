@@ -1,7 +1,10 @@
 package com.hotelManagement.hotelManagement.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -32,9 +35,11 @@ public class Staff {
     @Column(name = "salary")
     private double salary;
 
-    @OneToOne(mappedBy = "staff")
-    private Reservation reservation;
+//    @JsonManagedReference(value = "staff-reservation")
+    @OneToMany(mappedBy = "staff")
+    private List<Reservation> reservations;
 
-    @OneToOne(mappedBy = "staff")
-    private ServiceUsage serviceUsage;
+//    @JsonManagedReference(value = "staff-serviceUsage")
+    @OneToMany(mappedBy = "staff")
+    private List<ServiceUsage> serviceUsages;
 }

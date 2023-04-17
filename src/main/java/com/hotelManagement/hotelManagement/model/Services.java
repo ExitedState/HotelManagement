@@ -1,5 +1,6 @@
 package com.hotelManagement.hotelManagement.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,6 +27,7 @@ public class Services {
     @Column(name = "status")
     private String status;
 
+//    @JsonManagedReference(value = "service-serviceUsage")
     @OneToOne(mappedBy = "service")
     private ServiceUsage serviceUsage;
 }

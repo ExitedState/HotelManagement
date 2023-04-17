@@ -1,7 +1,10 @@
 package com.hotelManagement.hotelManagement.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -10,8 +13,12 @@ import lombok.*;
 public class Room {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "room_ID")
+    private Long roomID;
+
     @Column(name = "room_number")
-    private Long roomNum;
+    private int roomNumber;
 
     @Column(name = "room_status")
     private String roomStatus;
@@ -25,7 +32,7 @@ public class Room {
     @Column(name = "num_people")
     private int capacity;
 
-    @ManyToOne
-    @JoinColumn(name = "Reservation_ID")
-    private Reservation reservation;
+//    @JsonManagedReference(value = "reservation-room")
+    @OneToMany(mappedBy = "room")
+    private List<Reservation> reservations;
 }
