@@ -54,7 +54,7 @@ public class ReservationService {
         double totalPrice = room.getPpn() * reservation.getDuration();
         totalPrice += getServiceUsageTotalForGuest(guest);
         reservation.setTotal(totalPrice);
-
+        reservation.setRoom(room);
         return reservationRepository.save(reservation);
     }
 
