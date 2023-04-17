@@ -201,14 +201,23 @@
             document.getElementById('detailsTotal').textContent = guest.reservation.total;
             document.getElementById('detailsPerson').textContent = guest.reservation.person;
 
-            const serviceUsageList = document.getElementById('detailsServiceUsageList');
-            while (serviceUsageList.firstChild) {
-                serviceUsageList.removeChild(serviceUsageList.firstChild);
+            const serviceUsageTableBody = document.getElementById('detailsServiceUsageTableBody');
+            while (serviceUsageTableBody.firstChild) {
+                serviceUsageTableBody.removeChild(serviceUsageTableBody.firstChild);
             }
             guest.serviceUsages.forEach(serviceUsage => {
-                const listItem = document.createElement('li');
-                listItem.textContent = `ServiceUsageID: ${serviceUsage.serviceUsageID}, TimeIn: ${serviceUsage.timeIn}, TimeOut: ${serviceUsage.timeOut}, Service: ${serviceUsage.service.serviceName}, Price: ${serviceUsage.service.price}`;
-                serviceUsageList.appendChild(listItem);
+                const row = serviceUsageTableBody.insertRow(-1);
+                const serviceUsageIdCell = row.insertCell(0);
+                const timeInCell = row.insertCell(1);
+                const timeOutCell = row.insertCell(2);
+                const serviceCell = row.insertCell(3);
+                const priceCell = row.insertCell(4);
+
+                serviceUsageIdCell.textContent = serviceUsage.serviceUsageID;
+                timeInCell.textContent = serviceUsage.timeIn;
+                timeOutCell.textContent = serviceUsage.timeOut;
+                serviceCell.textContent = serviceUsage.service.serviceName;
+                priceCell.textContent = '$' + serviceUsage.service.price;
             });
 
             document.getElementById('detailsModal').style.display = 'block';
@@ -240,6 +249,9 @@
         window.addEventListener('click', (event) => {
             if (event.target === document.getElementById('editModal')) {
                 hideEditModal();
+            }
+            if (event.target === document.getElementById('detailsModal')) {
+                hideDetailsModal();
             }
         });
     </script>
@@ -330,10 +342,31 @@
         <p>Person: <span id="detailsPerson"></span></p>
 
         <h3>Service Usage Details</h3>
-        <ul id="detailsServiceUsageList"></ul>
+        <table id="detailsServiceUsageTable" style="border-collapse: collapse; width: 100%;">
+            <thead>
+            <tr>
+                <th style="border: 1px solid black; padding: 8px; text-align: left; background-color: #f2f2f2;">
+                    ServiceUsageID
+                </th>
+                <th style="border: 1px solid black; padding: 8px; text-align: left; background-color: #f2f2f2;">TimeIn
+                </th>
+                <th style="border: 1px solid black; padding: 8px; text-align: left; background-color: #f2f2f2;">
+                    TimeOut
+                </th>
+                <th style="border: 1px solid black; padding: 8px; text-align: left; background-color: #f2f2f2;">
+                    Service
+                </th>
+                <th style="border: 1px solid black; padding: 8px; text-align: left; background-color: #f2f2f2;">Price
+                </th>
+            </tr>
+            </thead>
+            <tbody id="detailsServiceUsageTableBody">
+            </tbody>
+        </table>
         <button onclick="hideDetailsModal();">Close</button>
     </div>
 </div>
+
 
 </body>
 </html>
