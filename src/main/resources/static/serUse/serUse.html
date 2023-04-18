@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Service Usage Page</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        form {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            width: 50%;
+        }
+
+        form input, form button {
+            margin-top: 10px;
+        }
+
+        #serviceModal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        #serviceModalContent {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%;
+        }
+    </style>
+    <script>
+        async function fetchServiceUsages() {
+            const response = await fetch('/serviceUsage');
+            const serviceUsages = await response.json();
+            const table = document.getElementById('serviceUsageTable');
+            const tbody = table.querySelector('tbody');
+            while (tbody.firstChild) {
+                tbody.removeChild(tbody.firstChild);
+            }
+
+            serviceUsages.forEach(serviceUsage => {
+                const row = tbody.insertRow(-1);
+                const idCell = row.insertCell(0);
+                const timeInCell = row.insertCell(1);
+                const timeOutCell = row.insertCell(2);
+                const actionsCell = row.insertCell(3);
+
+                idCell.textContent = serviceUsage.serviceUsageID;
+                timeInCell.textContent = serviceUsage.timeIn;
+                timeOutCell.textContent = serviceUsage.timeOut;
+
+                const detailButton = document.createElement('button');
+                detailButton.textContent = 'Detail';
+                detailButton.addEventListener('click', () => {
+                    showServiceModal(serviceUsage.service);
+                });
+                actionsCell.appendChild(detailButton);
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.addEventListener('click', async () => {
+                    const confirmDelete = confirm('Are you sure you want to delete this service usage?');
+                    if (confirmDelete) {
+                        const response = await fetch(`/serviceUsage/${serviceUsage.serviceUsageID}`, {
+                            method: 'DELETE'
+                        });
+                        if (response.ok) {
+                            location.reload();
+                        } else {
+                            alert('Failed to delete service usage.');
+                        }
+                    }
+                });
+                actionsCell.appendChild(deleteButton);
+            });
+        }
+
+        function showServiceModal(service) {
+            document.getElementById('serviceName').textContent = service.serviceName;
+            document.getElementById('servicePrice').textContent = service.price;
+            document.getElementById('serviceDesc').textContent = service.desc;
+            document.getElementById('serviceStatus').textContent = service.status;
+            document.getElementById('serviceModal').style.display = 'block';
+        }
+
+        function hideServiceModal() {
+            document.getElementById('serviceModal').style.display = 'none';
+        }
+
+        async function createServiceUsage(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            const serviceUsageData = Object.fromEntries(formData);
+
+            serviceUsageData.guest = {guestID: parseInt(serviceUsageData.guestID)};
+            delete serviceUsageData.guestID;
+            serviceUsageData.service = {serviceID: parseInt(serviceUsageData.serviceID)};
+            delete serviceUsageData.serviceID;
+            serviceUsageData.staff = {staffID: parseInt(serviceUsageData.staffID)};
+            delete serviceUsageData.staffID;
+
+            const response = await fetch('/serviceUsage', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(serviceUsageData)
+            });
+            if (response.ok) {
+                location.reload();
+            } else {
+                alert('Failed to create service usage.');
+            }
+        }
+
+        async function fetchGuests() {
+            const response = await fetch('/guests');
+            const guests = await response.json();
+            const guestSelect = document.getElementById('guestID');
+            guests.forEach(guest => {
+                const option = document.createElement('option');
+                option.value = guest.guestID;
+                option.textContent = `${guest.firstName} ${guest.lastName} (${guest.guestID})`;
+                guestSelect.appendChild(option);
+            });
+        }
+
+        async function fetchStaff() {
+            const response = await fetch('/staffs');
+            const staff = await response.json();
+            const staffSelect = document.getElementById('staffID');
+            staff.forEach(staffMember => {
+                const option = document.createElement('option');
+                option.value = staffMember.staffID;
+                option.textContent = `${staffMember.firstName} ${staffMember.lastName} (${staffMember.staffID})`;
+                staffSelect.appendChild(option);
+            });
+        }
+
+        async function fetchServices() {
+            const response = await fetch('/services');
+            const services = await response.json();
+            const serviceSelect = document.getElementById('serviceID');
+            services.forEach(service => {
+                const option = document.createElement('option');
+                option.value = service.serviceID;
+                option.textContent = `${service.serviceName} (${service.serviceID})`;
+                serviceSelect.appendChild(option);
+            });
+        }
+
+        async function initData() {
+            await fetchServiceUsages();
+            await fetchGuests();
+            await fetchStaff();
+            await fetchServices();
+        }
+
+        window.onclick = function(event) {
+            if (event.target === document.getElementById('serviceModal')) {
+                hideServiceModal();
+            }
+        }
+    </script>
+</head>
+<body onload="initData();">
+<h1>Service Usage Page</h1>
+<table id="serviceUsageTable">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Time In</th>
+        <th>Time Out</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<h2>Create New Service Usage</h2>
+<form onsubmit="createServiceUsage(event);">
+    <label for="guestID">Guest:</label>
+    <select id="guestID" name="guestID" required>
+        <option disabled selected value> -- select an option --</option>
+    </select>
+    <label for="staffID">Staff:</label>
+    <select id="staffID" name="staffID" required>
+        <option disabled selected value> -- select an option --</option>
+    </select>
+    <label for="serviceID">Service:</label>
+    <select id="serviceID" name="serviceID" required>
+        <option disabled selected value> -- select an option --</option>
+    </select>
+    <label for="timeIn">Time In (optional):</label>
+    <input type="datetime-local" id="timeIn" name="timeIn">
+    <label for="timeOut">Time Out (optional):</label>
+    <input type="datetime-local" id="timeOut" name="timeOut">
+    <button type="submit">Create Service Usage</button>
+</form>
+<div id="serviceModal">
+    <div id="serviceModalContent">
+        <h2>Service Details</h2>
+        <p><strong>Name:</strong> <span id="serviceName"></span></p>
+        <p><strong>Price:</strong> <span id="servicePrice"></span></p>
+        <p><strong>Description:</strong> <span id="serviceDesc"></span></p>
+        <p><strong>Status:</strong> <span id="serviceStatus"></span></p>
+        <button onclick="hideServiceModal();">Close</button>
+    </div>
+</div>
+</body>
+</html>
+
