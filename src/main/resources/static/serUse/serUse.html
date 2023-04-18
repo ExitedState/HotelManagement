@@ -71,10 +71,25 @@
         }
     </style>
     <script>
+        let sortOrder = 0;
+
         async function fetchServiceUsages() {
             const searchQuery = document.getElementById('search').value;
             const response = await fetch('/serviceUsage');
             const serviceUsages = await response.json();
+            if (sortOrder !== 0) {
+                serviceUsages.sort((a, b) => {
+                    const timeInA = new Date(a.timeIn);
+                    const timeInB = new Date(b.timeIn);
+
+                    if (sortOrder % 2 === 0) {
+                        return timeInA - timeInB;
+                    } else {
+                        return timeInB - timeInA;
+                    }
+                });
+            }
+
             const table = document.getElementById('serviceUsageTable');
             const tbody = table.querySelector('tbody');
             while (tbody.firstChild) {
@@ -121,6 +136,26 @@
                 }
             });
         }
+
+        function toggleSort() {
+            sortOrder = (sortOrder + 1) % 3;
+            const sortModeElement = document.getElementById('sortMode');
+
+            switch (sortOrder) {
+                case 0:
+                    sortModeElement.textContent = 'No sorting';
+                    break;
+                case 1:
+                    sortModeElement.textContent = 'Ascending';
+                    break;
+                case 2:
+                    sortModeElement.textContent = 'Descending';
+                    break;
+            }
+
+            fetchServiceUsages();
+        }
+
 
         function showServiceModal(service) {
             document.getElementById('serviceName').textContent = service.serviceName;
@@ -224,6 +259,8 @@
 <div>
     <label for="search">Search:</label>
     <input type="text" id="search" placeholder="Search..." oninput="fetchServiceUsages();">
+    <button id="sortTimeIn" onclick="toggleSort();">Sort by Time In</button>
+    <span id="sortMode">No sorting</span>
 </div>
 <table id="serviceUsageTable">
     <thead>
