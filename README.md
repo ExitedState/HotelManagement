@@ -18,6 +18,7 @@
         <li>Lombok</li>
         <li>FasterXML Jackson</li>
         <li>html/css/javascript</li>
+        <li>DATABASE : postgreSQL</li>
     </ul>
 <h2>Getting Started</h2>
     <p>
