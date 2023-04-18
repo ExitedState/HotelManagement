@@ -80,7 +80,8 @@ public class ReservationService {
     public Reservation updateReservation(Long id, Reservation reservation) {
         Reservation existingReservation = reservationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", id));
-        if (!isRoomAvailable(existingReservation.getRoom(), reservation.getCheckInTime(), reservation.getCheckOutTime())) {
+        if (!isRoomAvailable(existingReservation.getRoom(), reservation.getCheckInTime(), reservation.getCheckOutTime()) &&
+        !existingReservation.getReservationID().equals(reservation.getReservationID())) {
             throw new IllegalStateException("The room is not available for the specified time period.");
         }
         existingReservation.setCheckInTime(reservation.getCheckInTime());
@@ -110,6 +111,7 @@ public class ReservationService {
     }
 
     private boolean isRoomAvailable(Room room, LocalDateTime checkInTime, LocalDateTime checkOutTime) {
+
         List<Reservation> reservations = reservationRepository.findByRoom(room);
 
         for (Reservation reservation : reservations) {

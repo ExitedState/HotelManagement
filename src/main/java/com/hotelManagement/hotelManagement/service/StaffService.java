@@ -24,6 +24,9 @@ public class StaffService {
     }
 
     public Staff createStaff(Staff staff){
+        String phone = staff.getPhone();
+        String sanitizedPhone = phone.replaceAll("\\D", "");
+        staff.setPhone(sanitizedPhone);
         return staffRepository.save(staff);
     }
 
