@@ -1,5 +1,7 @@
 package com.hotelManagement.hotelManagement.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -25,15 +28,17 @@ public class ServiceUsage {
     @Column(name = "time_out")
     private LocalDateTime timeOut;
 
-    @OneToOne
+    @JsonBackReference(value = "guest-serviceUsage")
+    @ManyToOne
     @JoinColumn(name = "guest_ID", referencedColumnName = "guest_ID")
     private Guest guest;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "service_ID", referencedColumnName = "service_ID")
     private Services service;
 
-    @OneToOne
+    @JsonBackReference(value = "reservation-serviceUsage")
+    @ManyToOne
     @JoinColumn(name = "staff_ID", referencedColumnName = "staff_ID")
     private Staff staff;
 }
