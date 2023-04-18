@@ -77,6 +77,10 @@
             const searchQuery = document.getElementById('search').value;
             const response = await fetch('/serviceUsage');
             const serviceUsages = await response.json();
+            if (searchQuery) {
+                sortOrder = 0;
+                document.getElementById('sortMode').textContent = 'No sorting';
+            }
             if (sortOrder !== 0) {
                 serviceUsages.sort((a, b) => {
                     const timeInA = new Date(a.timeIn);
