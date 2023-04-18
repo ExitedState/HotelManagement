@@ -1,0 +1,85 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-image: url('background.jpg');
+    background-size: cover;
+}
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+form {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+form input, form button {
+    margin-top: 10px;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #666;
+    font-size: 16px;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    color: #666;
+}
+
+form input:hover, form button:hover {
+    background-color: #666;
+    color: white;
+    cursor: pointer;
+}
+
+#editModal, #detailsModal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+background-color: #333;
+margin: 10% auto;
+padding: 20px;
+border: 1px solid #ffd700;
+width: 50%;
+border-radius: 5px;
+font-family: "Georgia", serif;
+}
+
+.navbar {
+overflow: hidden;
+background-color: #000;
+font-family: "Helvetica Neue", Arial, sans-serif;
+border-bottom: 1px solid #ffd700;
+}
+
+.navbar a {
+float: left;
+display: block;
+color: #ffd700;
+text-align: center;
+padding: 14px 16px;
+text-decoration: none;
+}
+
+.navbar a:hover {
+background-color: #ffd700;
+color: #000;
+}
