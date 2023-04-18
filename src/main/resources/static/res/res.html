@@ -213,26 +213,29 @@
             event.preventDefault();
             const form = event.target;
             const formData = new FormData(form);
-            const guestID = document.getElementById("guestID").value;
-            const roomID = document.getElementById("roomID").value;
-            const staffID = document.getElementById("staffID").value;
-            formData.append("guestID", guestID);
-            formData.append("roomID", roomID);
-            formData.append("staffID", staffID);
+            const reservationData = Object.fromEntries(formData);
 
-            const response = await fetch('/reservations', {
+            reservationData.guest = { guestID: parseInt(reservationData.guestID) };
+            delete reservationData.guestID;
+            reservationData.staff = { staffID: parseInt(reservationData.staffID) };
+            delete reservationData.staffID;
+            reservationData.room = { roomID: parseInt(reservationData.roomID) };
+            delete reservationData.roomID;
+
+            const response = await fetch('/reservation', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(Object.fromEntries(formData))
+                body: JSON.stringify(reservationData)
             });
             if (response.ok) {
-                fetchReservations();
+                location.reload();
             } else {
                 alert('Failed to create reservation.');
             }
         }
+
 
         window.addEventListener('click', (event) => {
             if (event.target === document.getElementById('editModal')) {
@@ -288,6 +291,8 @@
     <input type="number" id="roomID" name="roomID" required>
     <label for="staffID">Staff ID:</label>
     <input type="number" id="staffID" name="staffID" required>
+
+
     <button type="submit">Create Reservation</button>
 </form>
 
