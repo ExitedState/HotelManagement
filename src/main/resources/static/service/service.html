@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Services Page</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        form {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            width: 50%;
+        }
+
+        form input, form button {
+            margin-top: 10px;
+        }
+
+        #editModal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        #editModalContent {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%;
+        }
+
+        .navbar {
+            overflow: hidden;
+            background-color: #333;
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+    </style>
+    <script>
+        async function fetchServices() {
+            const searchQuery = document.getElementById('search').value.toLowerCase();
+            const response = await fetch('/services');
+            const services = await response.json();
+            const table = document.getElementById('servicesTable');
+            const tbody = table.querySelector('tbody');
+
+            while (tbody.firstChild) {
+                tbody.removeChild(tbody.firstChild);
+            }
+
+            services.forEach(service => {
+                if (service.serviceName.toLowerCase().includes(searchQuery) ||
+                    service.status.toLowerCase().includes(searchQuery)
+                ) {
+                    const row = tbody.insertRow(-1);
+                    const idCell = row.insertCell(0);
+                    const nameCell = row.insertCell(1);
+                    const statusCell = row.insertCell(2);
+                    const descCell = row.insertCell(3);
+                    const priceCell = row.insertCell(4);
+
+                    idCell.textContent = service.serviceID;
+                    nameCell.textContent = service.serviceName;
+                    statusCell.textContent = service.status;
+                    descCell.textContent = service.desc;
+                    priceCell.textContent = service.price.toLocaleString();
+
+                    const actionCell = row.insertCell(5);
+                    const editButton = document.createElement('button');
+                    editButton.textContent = 'Edit';
+                    editButton.onclick = () => openEditModal(service);
+                    actionCell.appendChild(editButton);
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'Delete';
+                    deleteButton.onclick = () => deleteService(service.serviceID);
+                    actionCell.appendChild(deleteButton);
+
+                }
+            });
+        }
+
+        async function createService(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            const response = await fetch('/services', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(Object.fromEntries(formData))
+            });
+            if (response.ok) {
+                location.reload();
+            } else {
+                alert('Failed to create service.');
+            }
+        }
+
+        async function deleteService(serviceID) {
+            const response = await fetch(`/services/${serviceID}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                location.reload();
+            } else {
+                alert('Failed to delete service.');
+            }
+        }
+
+        async function openEditModal(service) {
+            const modal = document.getElementById('editModal');
+            modal.style.display = 'block';
+
+            document.getElementById('editServiceID').value = service.serviceID;
+            document.getElementById('editServiceName').value = service.serviceName;
+            document.getElementById('editStatus').value = service.status;
+            document.getElementById('editDesc').value = service.desc;
+            document.getElementById('editPrice').value = service.price;
+        }
+
+        async function updateService(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            const serviceID = formData.get('serviceID');
+            const response = await fetch(`/services/${serviceID}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(Object.fromEntries(formData)),
+            });
+
+            if (response.ok) {
+                location.reload();
+            } else {
+                alert('Failed to update service.');
+            }
+        }
+    </script>
+</head>
+<body onload="fetchServices();">
+<div class="navbar">
+    <a href="/index.html">Home</a>
+    <a href="/guest/guest.html">Guest</a>
+    <a href="/room/room.html">Room</a>
+    <a href="/res/res.html">Reservation</a>
+    <a href="/service/service.html">Service</a>
+    <a href="/serUse/serUse.html">Service Usage</a>
+    <a href="/staff/staff.html">Staff</a>
+</div>
+<div>
+    <label for="search">Search:</label>
+    <input type="text" id="search" placeholder="Search..." oninput="fetchServices();">
+</div>
+<table id="servicesTable">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Status</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<h2>Create New Service</h2>
+<form onsubmit="createService(event);">
+    <label for="serviceName">Service Name:</label>
+    <input type="text" id="serviceName" name="serviceName" required>
+
+    <label for="status">Status:</label>
+    <select id="status" name="status" required>
+        <option value="ACTIVE">ACTIVE</option>
+        <option value="INACTIVE">INACTIVE</option>
+    </select>
+
+    <label for="desc">Description:</label>
+    <input type="text" id="desc" name="desc" required>
+
+    <label for="price">Price:</label>
+    <input type="number" id="price" name="price" step="0.01" required>
+
+    <button type="submit">Create Service</button>
+</form>
+<div id="editModal">
+    <div id="editModalContent">
+        <h2>Edit Service</h2>
+        <form onsubmit="updateService(event);">
+            <input type="hidden" id="editServiceID" name="serviceID">
+            <label for="editServiceName">Service Name:</label>
+            <input type="text" id="editServiceName" name="serviceName" required>
+            <label for="editStatus">Status:</label>
+            <select id="editStatus" name="status" required>
+                <option value="ACTIVE">ACTIVE</option>
+                <option value="INACTIVE">INACTIVE</option>
+            </select>
+            <label for="editDesc">Description:</label>
+            <input type="text" id="editDesc" name="desc" required>
+            <label for="editPrice">Price:</label>
+            <input type="number" id="editPrice" name="price" step="0.01" required>
+            <button type="submit">Update Service</button>
+            <button type="button" onclick="document.getElementById('editModal').style.display = 'none';">Close</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

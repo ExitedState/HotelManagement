@@ -38,6 +38,7 @@ public class ServiceUsageService {
             LocalDateTime oneHourLater = serviceUsage.getTimeIn().plus(1, ChronoUnit.HOURS);
             serviceUsage.setTimeOut(oneHourLater);
         }
+
         Long serviceId = serviceUsage.getService().getServiceID();
         Long guestId = serviceUsage.getGuest().getGuestID();
         Long staffId = serviceUsage.getStaff().getStaffID();
@@ -48,7 +49,10 @@ public class ServiceUsageService {
                 .orElseThrow(() -> new ResourceNotFoundException("Guest", "id", guestId));
         Staff staff = staffRepository.findById(staffId)
                 .orElseThrow(() -> new ResourceNotFoundException("Staff", "id", staffId));
-
+        //if service status is INACTIVE, throw exception
+        if (service.getStatus().equals("INACTIVE")) {
+            throw new IllegalStateException("The service is currently disabled");
+        }
         serviceUsage.setService(service);
         serviceUsage.setGuest(guest);
         serviceUsage.setStaff(staff);
