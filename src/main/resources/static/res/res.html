@@ -126,7 +126,7 @@
                     checkInTimeCell.textContent = reservation.checkInTime;
                     checkOutTimeCell.textContent = reservation.checkOutTime;
                     durationCell.textContent = reservation.duration;
-                    totalCell.textContent = reservation.total;
+                    totalCell.textContent = reservation.total.toLocaleString();
                     personCell.textContent = reservation.person;
                     roomNumberCell.textContent = reservation.room.roomNumber;
 
