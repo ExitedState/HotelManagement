@@ -49,9 +49,30 @@
             border: 1px solid #888;
             width: 50%;
         }
+
+        .navbar {
+            overflow: hidden;
+            background-color: #333;
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
     </style>
     <script>
         async function fetchServiceUsages() {
+            const searchQuery = document.getElementById('search').value;
             const response = await fetch('/serviceUsage');
             const serviceUsages = await response.json();
             const table = document.getElementById('serviceUsageTable');
@@ -61,39 +82,43 @@
             }
 
             serviceUsages.forEach(serviceUsage => {
-                const row = tbody.insertRow(-1);
-                const idCell = row.insertCell(0);
-                const timeInCell = row.insertCell(1);
-                const timeOutCell = row.insertCell(2);
-                const actionsCell = row.insertCell(3);
+                if (serviceUsage.timeIn.includes(searchQuery) ||
+                    serviceUsage.timeOut.includes(searchQuery)
+                ) {
+                    const row = tbody.insertRow(-1);
+                    const idCell = row.insertCell(0);
+                    const timeInCell = row.insertCell(1);
+                    const timeOutCell = row.insertCell(2);
+                    const actionsCell = row.insertCell(3);
 
-                idCell.textContent = serviceUsage.serviceUsageID;
-                timeInCell.textContent = serviceUsage.timeIn;
-                timeOutCell.textContent = serviceUsage.timeOut;
+                    idCell.textContent = serviceUsage.serviceUsageID;
+                    timeInCell.textContent = serviceUsage.timeIn;
+                    timeOutCell.textContent = serviceUsage.timeOut;
 
-                const detailButton = document.createElement('button');
-                detailButton.textContent = 'Detail';
-                detailButton.addEventListener('click', () => {
-                    showServiceModal(serviceUsage.service);
-                });
-                actionsCell.appendChild(detailButton);
+                    const detailButton = document.createElement('button');
+                    detailButton.textContent = 'Detail';
+                    detailButton.addEventListener('click', () => {
+                        showServiceModal(serviceUsage.service);
+                    });
+                    actionsCell.appendChild(detailButton);
 
-                const deleteButton = document.createElement('button');
-                deleteButton.textContent = 'Delete';
-                deleteButton.addEventListener('click', async () => {
-                    const confirmDelete = confirm('Are you sure you want to delete this service usage?');
-                    if (confirmDelete) {
-                        const response = await fetch(`/serviceUsage/${serviceUsage.serviceUsageID}`, {
-                            method: 'DELETE'
-                        });
-                        if (response.ok) {
-                            location.reload();
-                        } else {
-                            alert('Failed to delete service usage.');
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'Delete';
+                    deleteButton.addEventListener('click', async () => {
+                        const confirmDelete = confirm('Are you sure you want to delete this service usage?');
+                        if (confirmDelete) {
+                            const response = await fetch(`/serviceUsage/${serviceUsage.serviceUsageID}`, {
+                                method: 'DELETE'
+                            });
+                            if (response.ok) {
+                                location.reload();
+                            } else {
+                                alert('Failed to delete service usage.');
+                            }
                         }
-                    }
-                });
-                actionsCell.appendChild(deleteButton);
+                    });
+                    actionsCell.appendChild(deleteButton);
+                }
             });
         }
 
@@ -179,7 +204,7 @@
             await fetchServices();
         }
 
-        window.onclick = function(event) {
+        window.onclick = function (event) {
             if (event.target === document.getElementById('serviceModal')) {
                 hideServiceModal();
             }
@@ -187,7 +212,19 @@
     </script>
 </head>
 <body onload="initData();">
-<h1>Service Usage Page</h1>
+<div class="navbar">
+    <a href="/index.html">Home</a>
+    <a href="/guest/guest.html">Guest</a>
+    <a href="/room/room.html">Room</a>
+    <a href="/res/res.html">Reservation</a>
+    <a href="/service/service.html">Service</a>
+    <a href="/serUse/serUse.html">Service Usage</a>
+    <a href="/staff/staff.html">Staff</a>
+</div>
+<div>
+    <label for="search">Search:</label>
+    <input type="text" id="search" placeholder="Search..." oninput="fetchServiceUsages();">
+</div>
 <table id="serviceUsageTable">
     <thead>
     <tr>
