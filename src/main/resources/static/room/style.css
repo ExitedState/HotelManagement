@@ -18,16 +18,15 @@ body {
 
 h2 {
     text-align: center;
-    margin: 1rem auto;
     font-size: 2.5rem;
     color: var(--background-color);
     background-color: var(--accent-color);
     text-shadow: 1px 1px 0px rgba(255,255,255,0.5);
     letter-spacing: 3px;
+    margin-top: 1rem;
     border: 2px solid var(--accent-color);
     padding: 10px;
     display: inline-block;
-    width: 40%;
 }
 
 /* Form styles */
@@ -66,7 +65,14 @@ button {
   font-weight: bold;
   cursor: pointer;
 }
-
+select{
+    padding: 1rem;
+  border-radius: 5px;
+  border: none;
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  margin-bottom: 2rem;
+}
 
 /* Table styles */
 table {

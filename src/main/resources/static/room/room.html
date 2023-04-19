@@ -2,74 +2,8 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="style.css">
     <title>Room Page</title>
-    <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        form {
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            width: 50%;
-        }
-
-        form input, form button {
-            margin-top: 10px;
-        }
-
-        #editModal, #detailsModal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
-        }
-
-        #editModalContent, #detailsModalContent {
-            background-color: #fefefe;
-            margin: 10% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 50%;
-        }
-
-        .navbar {
-            overflow: hidden;
-            background-color: #333;
-            font-family: Arial, sans-serif;
-        }
-
-        .navbar a {
-            float: left;
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
-        }
-
-        .navbar a:hover {
-            background-color: #ddd;
-            color: black;
-        }
-    </style>
     <script>
         let currentRoomId;
 
@@ -238,7 +172,7 @@
                 <option value="EXECUTIVE">EXECUTIVE</option>
                 <option value="PRESIDENTIAL">PRESIDENTIAL</option>
             </select>
-            <label for="editPPN">PPN</label>
+            <label for="editPPN">Price Per Night</label>
             <input type="text" id="editPPN" name="ppn">
             <label for="editCapacity">Capacity</label>
             <input type="text" id="editCapacity" name="capacity">
@@ -263,7 +197,7 @@
                 <option value="EXECUTIVE">EXECUTIVE</option>
                 <option value="PRESIDENTIAL">PRESIDENTIAL</option>
             </select>
-            <label for="createPPN">PPN</label>
+            <label for="createPPN">Price Per Night</label>
             <input type="text" id="createPPN" name="ppn">
             <label for="createCapacity">Capacity</label>
             <input type="text" id="createCapacity" name="capacity">
