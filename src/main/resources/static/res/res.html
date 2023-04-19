@@ -1,96 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" type="text/css" href="styleRes.css">
     <meta charset="UTF-8">
     <title>Reservation Page</title>
-    <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        form {
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            width: 50%;
-        }
-
-        form input, form button {
-            margin-top: 10px;
-        }
-
-        #editModal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
-        }
-
-        #editModalContent {
-            background-color: #fefefe;
-            margin: 10% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 50%;
-        }
-
-        #roomDetailsModal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
-        }
-
-        #roomDetailsModalContent {
-            background-color: #fefefe;
-            margin: 10% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 50%;
-        }
-
-        .navbar {
-            overflow: hidden;
-            background-color: #333;
-            font-family: Arial, sans-serif;
-        }
-
-        .navbar a {
-            float: left;
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
-        }
-
-        .navbar a:hover {
-            background-color: #ddd;
-            color: black;
-        }
-
-    </style>
     <script>
         let currentReservationId;
 
@@ -301,8 +214,8 @@
     <a href="/serUse/serUse.html">Service Usage</a>
     <a href="/staff/staff.html">Staff</a>
 </div>
-<div>
-    <label for="search">Search:</label>
+<div class="searchBlock">
+    <label for="search" class="inputLabel">Search:</label>
     <input type="text" id="search" placeholder="Search..." oninput="fetchReservations()">
 </div>
 <table id="reservationTable">
@@ -322,8 +235,9 @@
     </tbody>
 </table>
 
-<h2>Create New Reservation</h2>
-<form onsubmit="createReservation(event);">
+<h2 class="h2Block">Create New Reservation</h2>
+
+<form onsubmit="createReservation(event);" class="formBlock">
     <label for="checkInTime">Check-in Time:</label>
     <input type="datetime-local" id="checkInTime" name="checkInTime" required>
     <label for="checkOutTime">Check-out Time:</label>
