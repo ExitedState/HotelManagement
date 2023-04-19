@@ -24,7 +24,6 @@ input{
 #servicesTable{
     border-collapse: collapse;
     width: 100%;
-    /*border: 4px solid white;*/
     font-family: "Helvetica Neue", Arial, sans-serif;
     font-weight: bold;
     opacity: 0.9;
@@ -43,7 +42,6 @@ input{
 }
 
 .formBlock{
-    /*border: 4px solid white;*/
     width: 50%;
     margin-left: auto;
     margin-right: auto;
