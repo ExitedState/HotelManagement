@@ -86,6 +86,7 @@ public class ReservationService {
         }
         existingReservation.setCheckInTime(reservation.getCheckInTime());
         existingReservation.setCheckOutTime(reservation.getCheckOutTime());
+        existingReservation.setPerson(reservation.getPerson());
         existingReservation.setDuration(reservation.calculateDuration());
 
         // Update the total price
