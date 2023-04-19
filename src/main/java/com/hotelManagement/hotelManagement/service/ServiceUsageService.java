@@ -57,6 +57,11 @@ public class ServiceUsageService {
         serviceUsage.setGuest(guest);
         serviceUsage.setStaff(staff);
 
+        // Update the total for the reservation linked to this guest
+        Reservation reservation = guest.getReservation();
+        if (reservation != null) {
+            reservationService.recalculateTotalForReservation(reservation.getReservationID());
+        }
         return serviceUsageRepository.save(serviceUsage);
     }
 
