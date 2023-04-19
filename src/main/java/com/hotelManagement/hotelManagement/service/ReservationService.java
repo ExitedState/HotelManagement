@@ -81,7 +81,7 @@ public class ReservationService {
         Reservation existingReservation = reservationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", id));
         if (!isRoomAvailable(existingReservation.getRoom(), reservation.getCheckInTime(), reservation.getCheckOutTime()) &&
-        !existingReservation.getReservationID().equals(reservation.getReservationID())) {
+        !existingReservation.getReservationID().equals(id)) {
             throw new IllegalStateException("The room is not available for the specified time period.");
         }
         existingReservation.setCheckInTime(reservation.getCheckInTime());
