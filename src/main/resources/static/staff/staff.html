@@ -1,97 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" type="text/css" href="styleStaff.css">
     <meta charset="UTF-8">
     <title>Staff Page</title>
-    <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        form {
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            width: 50%;
-        }
-
-        form input, form button {
-            margin-top: 10px;
-        }
-
-        #editModal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
-        }
-
-        #editModalContent {
-            background-color: #fefefe;
-            margin: 10% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 50%;
-        }
-
-        #detailModal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
-        }
-
-        #detailModalContent {
-            background-color: #fefefe;
-            margin: 5% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            overflow-y: auto;
-            max-height: 90%;
-        }
-
-        .navbar {
-            overflow: hidden;
-            background-color: #333;
-            font-family: Arial, sans-serif;
-        }
-
-        .navbar a {
-            float: left;
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
-        }
-
-        .navbar a:hover {
-            background-color: #ddd;
-            color: black;
-        }
-    </style>
     <script>
         let currentStaffId;
 
@@ -283,7 +195,7 @@
     <a href="/serUse/serUse.html">Service Usage</a>
     <a href="/staff/staff.html">Staff</a>
 </div>
-<div>
+<div class="searchBar">
     <label for="search">Search:</label>
     <input type="text" id="search" placeholder="Search..." oninput="fetchStaffs();">
 </div>
@@ -304,8 +216,8 @@
     </tbody>
 </table>
 
-<h2>Create New Staff</h2>
-<form onsubmit="createStaff(event);">
+<h2 class="newStaff">Create New Staff</h2>
+<form onsubmit="createStaff(event);" class="form">
     <label for="firstName">First Name:</label>
     <input type="text" id="firstName" name="firstName" required>
 
