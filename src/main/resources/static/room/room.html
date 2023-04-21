@@ -136,9 +136,9 @@
     <a href="/serUse/serUse.html">Service Usage</a>
     <a href="/staff/staff.html">Staff</a>
 </div>
-<div>
-    <label for="search">Search:</label>
-    <input type="text" id="search" placeholder="Search..." oninput="fetchRooms()">
+<div class="searchBlock">
+    <label for="search" class="searchBlock">Search:</label>
+    <input type="text" id="search" placeholder="Search by number, status or type" oninput="fetchRooms()">
 </div>
 <table id="roomTable">
     <thead>
@@ -157,7 +157,7 @@
 </table>
 <div id="editModal">
     <div id="editModalContent">
-        <form onsubmit="updateRoom(event)">
+        <form onsubmit="updateRoom(event)" class="formBlock">
             <label for="editRoomNumber">Room Number</label>
             <input type="text" id="editRoomNumber" name="roomNumber">
             <label for="editRoomStatus">Room Status</label>

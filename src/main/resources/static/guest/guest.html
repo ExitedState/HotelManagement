@@ -180,8 +180,8 @@
     <a href="/serUse/serUse.html">Service Usage</a>
     <a href="/staff/staff.html">Staff</a>
 </div>
-<div>
-    <label for="search">Search:</label>
+<div class="searchBlock">
+    <label for="search" class="inputLabel">Search:</label>
     <input type="text" id="search" placeholder="Search by fn, ln or phone" oninput="fetchGuests();">
 </div>
 <table id="guestTable">
@@ -200,8 +200,8 @@
     </tbody>
 </table>
 
-<h2>Create New Guest</h2>
-<form onsubmit="createGuest(event);">
+<h2 class="h2Block">Create New Guest</h2>
+<form onsubmit="createGuest(event);" class="formBlock">
     <label for="firstName">First Name:</label>
     <input type="text" id="firstName" name="firstName" required>
 
