@@ -92,6 +92,8 @@ td {
   border: 1px solid var(--secondary-color);
   padding: 0.5rem;
   text-align: left;
+    word-wrap: break-word;
+    max-width: 150px;
 }
 
 th {

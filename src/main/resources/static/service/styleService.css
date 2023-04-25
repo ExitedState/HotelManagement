@@ -68,6 +68,8 @@ th, td {
     border: 1px solid black;
     padding: 8px;
     text-align: left;
+    word-wrap: break-word;
+    max-width: 150px;
 }
 
 th {
