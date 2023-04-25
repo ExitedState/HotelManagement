@@ -4,15 +4,37 @@
     <link rel="stylesheet" type="text/css" href="index.css">
     <meta charset="UTF-8">
     <title>Hotel Management</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
 </head>
 <body>
-<img src="hotel logo.jpg" alt="The Continental Hotel Logo" class="hotel-logo">
-<h1>Welcome to Hotel Management</h1>
-<button onclick="location.href='guest/guest.html';">Guest</button>
-<button onclick="location.href='room/room.html';">Room</button>
-<button onclick="location.href='res/res.html';">Reservation</button>
-<button onclick="location.href='service/service.html';">Service</button>
-<button onclick="location.href='serUse/serUse.html';">Service Usage</button>
-<button onclick="location.href='staff/staff.html';">Staff</button>
+<div class="container">
+    <img src="hotel logo.jpg" alt="The Continental Hotel Logo" class="hotel-logo" data-tilt>
+    <h1>Hotel Management System</h1>
+    <div class="button-container">
+        <button class="animated-button" onclick="location.href='guest/guest.html';" data-tilt>Guest</button>
+        <button class="animated-button" onclick="location.href='room/room.html';" data-tilt>Room</button>
+        <button class="animated-button" onclick="location.href='res/res.html';" data-tilt>Reservation</button>
+        <button class="animated-button" onclick="location.href='service/service.html';" data-tilt>Service</button>
+        <button class="animated-button" onclick="location.href='serUse/serUse.html';" data-tilt>Service Usage</button>
+        <button class="animated-button" onclick="location.href='staff/staff.html';" data-tilt>Staff</button>
+    </div>
+</div>
+<script>
+    VanillaTilt.init(document.querySelectorAll(".animated-button, .hotel-logo"), {
+        max: 15,
+        speed: 400,
+        glare: true,
+        "max-glare": 0.5
+    });
+
+    VanillaTilt.init(document.querySelector(".hotel-logo"), {
+        max: 15,
+        speed: 400,
+        glare: true,
+        "max-glare": 0.5,
+        scale: 1.1
+    });
+</script>
+
 </body>
 </html>
