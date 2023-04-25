@@ -1,8 +1,11 @@
 package com.hotelManagement.hotelManagement.controller;
 
+import com.hotelManagement.hotelManagement.model.Guest;
 import com.hotelManagement.hotelManagement.model.Room;
 import com.hotelManagement.hotelManagement.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,5 +41,14 @@ public class RoomController {
     @DeleteMapping("/{id}")
     public void deleteRoom(@PathVariable Long id){
         roomService.deleteRoom(id);
+    }
+
+    @GetMapping("/{id}/current-guest")
+    public ResponseEntity<Guest> getCurrentGuestForRoom(@PathVariable Long id) {
+        Guest guest = roomService.getCurrentGuestForRoom(id);
+        if (guest == null) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+        return ResponseEntity.ok(guest);
     }
 }

@@ -1,6 +1,7 @@
 package com.hotelManagement.hotelManagement.service;
 
 import com.hotelManagement.hotelManagement.exception.ResourceNotFoundException;
+import com.hotelManagement.hotelManagement.model.Guest;
 import com.hotelManagement.hotelManagement.model.Reservation;
 import com.hotelManagement.hotelManagement.model.Room;
 import com.hotelManagement.hotelManagement.repository.RoomRepository;
@@ -52,6 +53,11 @@ public class RoomService {
         Room room = roomRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Room", "id", id));
         roomRepository.delete(room);
+    }
+
+    public Guest getCurrentGuestForRoom(long roomId) {
+        Room room = getRoomById(roomId);
+        return reservationService.getCurrentGuestForRoom(room);
     }
 
 }
