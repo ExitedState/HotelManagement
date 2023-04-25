@@ -6,18 +6,50 @@
     <title>Guest Page</title>
     <script>
         let currentGuestId;
+        let currentPage = 1;
+        const itemsPerPage = 10;
+
+        function paginate(array, page, itemsPerPage) {
+            const startIndex = (page - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            return array.slice(startIndex, endIndex);
+        }
+
+        function createPaginationButtons(totalItems, itemsPerPage) {
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            const paginationDiv = document.getElementById('pagination');
+
+            for (let i = 1; i <= totalPages; i++) {
+                const button = document.createElement('button');
+                button.textContent = i;
+                button.classList.add('pagination-btn');
+                button.addEventListener('click', () => {
+                    currentPage = i;
+                    fetchGuests();
+                });
+                paginationDiv.appendChild(button);
+            }
+        }
 
         async function fetchGuests() {
             const searchQuery = document.getElementById('search').value.toLowerCase();
             const response = await fetch('/guests');
             const guests = await response.json();
+            const filteredGuests = guests.filter(guest => (
+                guest.firstName.toLowerCase().includes(searchQuery) ||
+                guest.lastName.toLowerCase().includes(searchQuery) ||
+                guest.phone.toLowerCase().includes(searchQuery)
+            ));
             const table = document.getElementById('guestTable');
             const tbody = table.querySelector('tbody');
             while (tbody.firstChild) {
                 tbody.removeChild(tbody.firstChild);
             }
 
-            guests.forEach(guest => {
+            // Apply pagination on the displayed guests
+            const paginatedGuests = paginate(filteredGuests, currentPage, itemsPerPage);
+
+            paginatedGuests.forEach(guest => {
                 if (
                     guest.firstName.toLowerCase().includes(searchQuery) ||
                     guest.lastName.toLowerCase().includes(searchQuery) ||
@@ -72,6 +104,9 @@
 
                 }
             });
+            const paginationDiv = document.getElementById('pagination');
+            paginationDiv.innerHTML = '';
+            createPaginationButtons(guests.length, itemsPerPage);
         }
 
 
@@ -168,6 +203,24 @@
                 hideDetailsModal();
             }
         });
+
+        function showCreateModal() {
+            document.getElementById('createModal').style.display = 'block';
+        }
+
+        function hideCreateModal() {
+            document.getElementById('createModal').style.display = 'none';
+        }
+
+        function toggleCreateForm() {
+            const form = document.getElementById('createGuestForm');
+            if (form.style.maxHeight) {
+                form.style.maxHeight = null;
+            } else {
+                form.style.maxHeight = form.scrollHeight + 'px';
+            }
+        }
+
     </script>
 </head>
 <body onload="fetchGuests();">
@@ -183,6 +236,27 @@
 <div class="searchBlock">
     <label for="search" class="inputLabel">Search:</label>
     <input type="text" id="search" placeholder="Search by fn, ln or phone" oninput="fetchGuests();">
+    <button id="createGuestButton" onclick="toggleCreateForm();">Create New Guest</button>
+</div>
+<div id="createGuestForm">
+    <form onsubmit="createGuest(event);" class="formBlock">
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="firstName" required>
+
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" name="lastName" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="phone">Phone:</label>
+        <input type="text" id="phone" name="phone" required>
+
+        <label for="address">Address:</label>
+        <input type="text" id="address" name="address" required>
+
+        <button type="submit">Create Guest</button>
+    </form>
 </div>
 <table id="guestTable">
     <thead>
@@ -199,26 +273,9 @@
     <tbody>
     </tbody>
 </table>
+<div id="pagination" class="pagination"></div>
 
-<h2 class="h2Block">Create New Guest</h2>
-<form onsubmit="createGuest(event);" class="formBlock">
-    <label for="firstName">First Name:</label>
-    <input type="text" id="firstName" name="firstName" required>
 
-    <label for="lastName">Last Name:</label>
-    <input type="text" id="lastName" name="lastName" required>
-
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required>
-
-    <label for="phone">Phone:</label>
-    <input type="text" id="phone" name="phone" required>
-
-    <label for="address">Address:</label>
-    <input type="text" id="address" name="address" required>
-
-    <button type="submit">Create Guest</button>
-</form>
 
 <div id="editModal">
     <div id="editModalContent">
