@@ -50,6 +50,9 @@ public class ReservationService {
         if (!isRoomAvailable(room, reservation.getCheckInTime(), reservation.getCheckOutTime())) {
             throw new IllegalStateException("The room is not available for the specified time period.");
         }
+        if(room.getCapacity()<reservation.getPerson()){
+            throw new IllegalStateException("The room is not available for the specified number of guests.");
+        }
         // Calculate the total price
         double totalPrice = room.getPpn() * reservation.getDuration();
         totalPrice += getServiceUsageTotalForGuest(guest);
