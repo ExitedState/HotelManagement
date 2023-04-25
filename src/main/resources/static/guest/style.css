@@ -1,24 +1,25 @@
 /* Color scheme */
 :root {
-  --background-color: #1C1C1C;
-  --primary-color: #800000;
-  --accent-color: #D4AF37;
-  --text-color: #C0C0C0;
-  --secondary-color: #3C3C3C;
+    --background-color: #1C1C1C;
+    --primary-color: #800000;
+    --accent-color: #D4AF37;
+    --text-color: #ba3131;
+    --secondary-color: #3C3C3C;
 }
 
 /* Body styles */
 body {
-  font-family: 'Montserrat', sans-serif;
-  background-color: var(--background-color);
-  background-image: url('background.jpg');
-  background-size: cover;
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--background-color);
+    background-image: url('background.jpg');
+    background-size: cover;
 }
 
-.searchBlock{
+.searchBlock {
     border: 7px solid transparent;
 }
-.h2Block{
+
+.h2Block {
     border: 4px solid #3C3C3C;
     width: 50%;
     margin-left: auto;
@@ -29,23 +30,24 @@ body {
     font-size: 40px;
 }
 
-.formBlock{
+.formBlock {
     width: 50%;
     margin-left: auto;
     margin-right: auto;
 }
+
 /* Form styles */
 form {
-  margin: 1.25rem auto;
-  display: flex;
-  flex-direction: column;
-  width: 50%;
+    margin: 1.25rem auto;
+    display: flex;
+    flex-direction: column;
+    width: 50%;
 }
 
 label {
-  font-size: 1.75rem;
-  color: #D4AF37;
-  text-shadow: 1px 1px #000;
+    font-size: 1.75rem;
+    color: #D4AF37;
+    text-shadow: 1px 1px #000;
 }
 
 form input, form button, form select {
@@ -55,7 +57,7 @@ form input, form button, form select {
     border: 1px solid #666;
     font-size: 16px;
     font-family: "Helvetica Neue", Arial, sans-serif;
-    color: #00000;
+    color: #000000;
     opacity: 0.7;
 }
 
@@ -66,53 +68,56 @@ form input:hover, form button:hover, form select:hover {
 }
 
 button {
-  font-size: 1.5rem;
-  padding: 1rem 2rem;
-  border-radius: 5px;
-  border: none;
-  background-color: var(--accent-color);
-  color: #00000;
-  font-weight: bold;
-  cursor: pointer;
+    font-size: 1.5rem;
+    padding: 1rem 2rem;
+    border-radius: 5px;
+    border: none;
+    background-color: var(--accent-color);
+    color: #000000;
+    font-weight: bold;
+    cursor: pointer;
 }
 
 
 /* Table styles */
 table {
-  border-collapse: collapse;
-  width: 100%;
-  font-family: "Helvetica Neue", Arial, sans-serif;
-  font-weight: bold;
-  opacity: 0.9;
-  background-color: white;
+    border-collapse: collapse;
+    width: 100%;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-weight: bold;
+    opacity: 0.9;
+    background-color: white;
 }
 
 th,
 td {
-  border: 1px solid var(--secondary-color);
-  padding: 0.5rem;
-  text-align: left;
+    border: 1px solid var(--secondary-color);
+    padding: 0.5rem;
+    text-align: left;
     word-wrap: break-word;
     max-width: 150px;
 }
 
 th {
-  background-color: var(--accent-color);
-  color: var(--background-color);
-}
-td{
+    background-color: var(--accent-color);
     color: var(--background-color);
 }
-td button{
+
+td {
+    color: var(--background-color);
+}
+
+td button {
     margin-top: 10px;
     padding: 8px;
     border-radius: 5px;
     border: 1px solid #666;
     font-size: 16px;
     font-family: "Helvetica Neue", Arial, sans-serif;
-    color: #00000;
+    color: #000000;
     opacity: 0.7;
 }
+
 /* Modal styles */
 #editModal {
     display: none;
@@ -133,6 +138,7 @@ td button{
     border: 1px solid #888;
     width: 50%;
 }
+
 #detailsModal {
     display: none;
     position: fixed;
@@ -173,4 +179,85 @@ td button{
 .navbar a:hover {
     background-color: #ffd700;
     color: #000;
+}
+
+#createModal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+#createModalContent {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%;
+}
+
+#createGuestButton {
+    background-color: var(--accent-color);
+    border: none;
+    color: var(--secondary-color);
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 20px 0;
+    cursor: pointer;
+    transition-duration: 0.4s;
+    border-radius: 4px;
+}
+
+#createGuestButton:hover {
+    background-color: var(--secondary-color);
+    color: var(--accent-color);
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+#createGuestForm {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out;
+    /*background-color: var(--secondary-color);*/
+    padding: 20px;
+    margin-bottom: 20px;
+    /*border: 1px solid var(--accent-color);*/
+    border-radius: 4px;
+}
+
+
+/* Pagination styles */
+.pagination {
+    display: flex;
+    justify-content: left;
+    margin: 20px 0;
+}
+
+.pagination button {
+    color: var(--secondary-color);
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: background-color .3s;
+    border: 1px solid var(--secondary-color);
+    border-radius: 4px;
+}
+
+.pagination button.active {
+    background-color: var(--accent-color);
+    color: var(--background-color);
+    border: 1px solid var(--accent-color);
+}
+
+.pagination button:hover:not(.active) {
+    background-color: var(--secondary-color);
+    color: var(--accent-color);
 }
