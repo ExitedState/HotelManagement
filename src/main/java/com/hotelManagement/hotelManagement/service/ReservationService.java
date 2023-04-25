@@ -124,5 +124,16 @@ public class ReservationService {
         return true;
     }
 
+    public Guest getCurrentGuestForRoom(Room room) {
+        LocalDateTime now = LocalDateTime.now();
+        for (Reservation reservation : room.getReservations()) {
+            if (reservation.getCheckInTime().isBefore(now) && reservation.getCheckOutTime().isAfter(now)) {
+                return reservation.getGuest();
+            }
+        }
+        return null;
+    }
+
+
 
 }
