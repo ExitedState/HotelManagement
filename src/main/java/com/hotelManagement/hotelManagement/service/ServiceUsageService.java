@@ -57,6 +57,9 @@ public class ServiceUsageService {
         serviceUsage.setGuest(guest);
         serviceUsage.setStaff(staff);
 
+        ServiceUsage updatedServiceUsage = serviceUsageRepository.save(serviceUsage);
+        // Get the guest related to this service usage
+        guest = updatedServiceUsage.getGuest();
         // Update the total for the reservation linked to this guest
         Reservation reservation = guest.getReservation();
         if (reservation != null) {
