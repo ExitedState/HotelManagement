@@ -1,0 +1,66 @@
+body {
+    background-color: #1C1C1C;
+    background-image: url("Hotel-index.jpg");
+    text-align: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    font-family: 'Playfair Display', serif;
+}
+
+h1 {
+    text-align: center;
+    font-size: 60px;
+    color: #D4AF37;
+    text-shadow: 2px 2px #000;
+    margin-top: 80px;
+    letter-spacing: 3px;
+    background-color: rgba(60,60,60,0.5); /* semi-transparent dark gray */
+    padding: 10px;
+}
+
+button {
+    background-color: #800000;
+    color: #C0C0C0;
+    border: none;
+    padding: 20px 30px;
+    font-size: 30px;
+    border-radius: 5px;
+    margin: 20px 10px;
+    cursor: pointer;
+    box-shadow: 2px 2px #000;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    transform: translateY(-5px);
+    box-shadow: 4px 4px #000;
+    background-color: #D4AF37;
+    color: #111;
+}
+
+.hotel-logo {
+    width: 375px;
+    margin-bottom: 0.5rem;
+    animation: logo-fade 3s ease forwards;
+}
+
+@keyframes logo-fade {
+    0% { opacity: 0; transform: scale(0.8); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+@media screen and (max-width: 768px) {
+    .hotel-logo {
+        width: 80%;
+    }
+    h1 {
+        font-size: 2.5rem;
+        margin-top: 6rem;
+    }
+    button {
+        font-size: 1.2rem;
+        padding: 1rem 2rem;
+        margin-top: 2.5rem;
+    }
+}
