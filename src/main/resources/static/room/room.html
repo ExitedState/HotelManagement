@@ -64,6 +64,12 @@
                     });
                     actionsCell.appendChild(deleteButton);
 
+                    const detailButton = document.createElement('button');
+                    detailButton.textContent = 'Detail';
+                    detailButton.addEventListener('click', () => {
+                        showDetailModal(room.roomID);
+                    });
+                    actionsCell.appendChild(detailButton);
                 }
             });
         }
@@ -81,6 +87,25 @@
 
         function hideEditModal() {
             document.getElementById('editModal').style.display = 'none';
+        }
+
+        async function showDetailModal(roomId) {
+            const response = await fetch(`/rooms/${roomId}/current-guest`);
+            if (response.status === 200) {
+                const guest = await response.json();
+                document.getElementById('guestName').textContent = `${guest.firstName} ${guest.lastName}`;
+                document.getElementById('guestEmail').textContent = guest.email;
+                document.getElementById('guestPhone').textContent = guest.phone;
+            } else {
+                document.getElementById('guestName').textContent = 'No guest';
+                document.getElementById('guestEmail').textContent = '';
+                document.getElementById('guestPhone').textContent = '';
+            }
+            document.getElementById('detailModal').style.display = 'block';
+        }
+
+        function hideDetailModal() {
+            document.getElementById('detailModal').style.display = 'none';
         }
 
         async function updateRoom(event) {
@@ -203,6 +228,15 @@
             <input type="text" id="createCapacity" name="capacity">
             <button type="submit">Create</button>
         </form>
+    </div>
+</div>
+<div id="detailModal" class="modal">
+    <div class="modal-content">
+        <h2>Current Guest</h2>
+        <p><strong>Name: </strong><span id="guestName"></span></p>
+        <p><strong>Email: </strong><span id="guestEmail"></span></p>
+        <p><strong>Phone: </strong><span id="guestPhone"></span></p>
+        <button onclick="hideDetailModal()">Close</button>
     </div>
 </div>
 </body>
