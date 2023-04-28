@@ -32,6 +32,7 @@
             <pre>DB_USERNAME=your_database_username
 DB_PASSWORD=your_database_password</pre>
         </li>
+        <li>Make sure to create a database with the following name in application.properties. By default, you should create a database named "hotelmanagementdb"</li>
         <li>Configure the database connection settings in the <code>application.properties</code> file</li>
         <li>Build and run the project</li>
     </ol>
