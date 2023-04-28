@@ -29,8 +29,8 @@
         <li>Install the required dependencies recommended for using IntelliJ.</li>
         <li>Create a new file called <code>application-dev.properties</code> in the <code>src/main/resources</code> directory</li>
         <li>In the <code>application-dev.properties</code> file, add the following lines:
-            <pre>DB_USERNAME=your_database_username
-DB_PASSWORD=your_database_password</pre>
+            <pre>DB_USERNAME=your_database_username //by default, it is postgres
+DB_PASSWORD=your_database_password //using the password from PostgreSQL installation
         </li>
         <li>Make sure to create a database with the following name in application.properties. By default, you should create a database named "hotelmanagementdb"</li>
         <li>Configure the database connection settings in the <code>application.properties</code> file</li>
